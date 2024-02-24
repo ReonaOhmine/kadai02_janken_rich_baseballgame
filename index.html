@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/baseball.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>野球ゲーム</title>
+</head>
+
+<!-- 背景を野球の画像に -->
+
+<body background="image/bg_baseball_ground.jpg">
+
+    <header>
+        <h1>プレイボール！！</h1>
+        <p>⚾練習の成果を出そう！⚾</p>
+    </header>
+
+    <main>
+        <!-- ストライクカウントの表示 -->
+        <div id="counts">
+            <!-- 最初は0でスタートさせる -->
+            <p id="strike">ストライク：<span id="strikeCount">0</span></p>
+            <p id="ball"> ボール：<span id="ballCount">0</span></p>
+            <p id="out">アウト：<span id="outCount">0</span></p>
+        </div>
+
+        <!--  ピッチャー -->
+        <div class="mainvisual">
+            <img src="image/546968.png" alt="ピッチャー" class="pitcher">
+        </div>
+
+        <!-- ユーザーの選択（高め、低め、見逃しから選ぶ。それぞれIDはバラバラである必要があるが、体裁は同じでいいのでclassは共通に） -->
+        <div class="choices">
+            <div id="takame" class="choice">高め</div>
+            <div id="hikume" class="choice">低め</div>
+            <div id="minogashi" class="choice">見逃</div>
+        </div>
+
+        <!-- 勝敗のメッセージ -->
+        <!-- 最初は画像を非表示にして、結果に応じてImgを表示させる -->
+        <img id="messageImg" class="message" src="" style="display: none;">
+
+    </main>
+
+    <footer></footer>
+
+    <script>
+        // readyについてはいまいち理解できておらず・・・
+        $(document).ready(function () {
+            // ゲーム開始時は0からスタートすることを示す。その後、カウントが増えていくために必要な表記
+            let strikeCount = 0;
+            let ballCount = 0;
+            let hitCount = 0;
+            let outCount = 0;
+
+                // .choiceがクリックされたらゲーム開始。
+            $('.choice').click(function () {
+                // PCの投げるボールに変数を発生させる
+                // Math.random()は、0以上1未満の変数を付与する。
+                let computerChoice = Math.random();
+                // let batterSwing;
+                let pitchType;
+
+                // ピッチャーの選択をランダムに決定させるために、変数の条件をif文で割り振る
+                // 一旦数字を3分割に
+                if (computerChoice < 0.33) {
+                    pitchType = '高め';
+                } else if (computerChoice < 0.66) {
+                    pitchType = '低め';
+                } else {
+                    pitchType = 'ボール';
+                }
+
+                // バッターの選択を処理する。
+                // クリックしたバッターチョイスがbatterSwingに反映されるように
+                batterSwing = $(this).text();
+
+
+                // バッティングのシミュレーション
+                // 複数ケースあるので「switch」を使う
+                switch (pitchType) {
+                    // PCが高めを投げた場合
+                    case '高め':
+                        // バッターも高めだったら、それはヒットになる（＝ヒットの画像を表示）
+                        if (batterSwing === '高め') {
+                            $('#messageImg').attr('src', 'image/hit.png').show();
+                            hitCount++;
+                        } else if (batterSwing === '低め') {
+                            $('#messageImg').attr('src', 'image/out.png').show();
+                            outCount++;
+                        } else {
+                            $('#messageImg').attr('src', 'image/Strike.png').show();
+                            strikeCount++;
+                        }
+                        // breakを置くことでこのcaseの処理の終了を示す（処理が続くことを防ぐ）
+                        break;
+
+                    // PCが低めを投げた場合
+                    case '低め':
+                        if (batterSwing === '高め') {
+                            $('#messageImg').attr('src', 'image/out.png').show();
+                            outCount++;
+                        } else if (batterSwing === '低め') {
+                            $('#messageImg').attr('src', 'image/hit.png').show();
+                            hitCount++;
+                        } else {
+                            $('#messageImg').attr('src', 'image/Strike.png').show();
+                            strikeCount++;
+                        }
+                        break;
+
+                    // PCがボールを投げた場合
+                    case 'ボール':
+                        if (batterSwing === '高め' || batterSwing === '低め') {
+                            $('#messageImg').attr('src', 'image/out.png').show();
+                            outCount++;
+                        } else {
+                            $('#messageImg').attr('src', 'image/ball.png').show();
+                            ballCount++;
+                        }
+                        break;
+                }
+
+                // ストライク、ボール、アウトのカウントを更新して表示
+                $('#strikeCount').text(strikeCount);
+                $('#ballCount').text(ballCount);
+                $('#outCount').text(outCount);
+
+                if (strikeCount >= 3 || ballCount >= 4 || outCount >= 3) {
+                    $('#messageImg').hide(); // 画像を非表示に
+                    console.log('ゲームリセット！');
+                    resetCounts(); // カウントをリセット
+
+                    if (strikeCount >= 3) {
+                        $('#messageImg').attr('src', 'image/haiboku.png').show(); // 画像表示
+                    } else if (ballCount >= 4) {
+                        $('#messageImg').attr('src', 'image/syori.png').show(); // 画像表示
+                    }
+                }
+            });
+
+            // カウントをリセットする関数
+            function resetCounts() {
+                strikeCount = 0;
+                ballCount = 0;
+                outCount = 0;
+
+                $('#strikeCount').text(strikeCount);
+                $('#ballCount').text(ballCount);
+                $('#outCount').text(outCount);
+            }
+        });
+    </script>
+</body>
+
+
+</html>

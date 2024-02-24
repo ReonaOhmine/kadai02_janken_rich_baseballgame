@@ -1,0 +1,107 @@
+/* Reset CSS */
+body, html {
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+}
+
+/* センタリング */
+header {
+    text-align: center;
+    margin: 50px 0;
+}
+
+header h1 {
+    font-size: 60px;
+    color: #000;
+    font-weight: bolder;
+}
+
+header p {
+    margin-top: 80px;
+    color: white;
+    font-weight: bold;
+}
+
+/* メインコンテンツ */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* カウント表示 */
+#counts {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #ECF4D9;
+    border-radius: 20%;
+}
+
+#counts p {
+    margin: 15px;
+}
+
+#counts span {
+    color: #000;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#strike {
+    color: green;
+}
+
+#ball {
+    color: blue;
+}
+
+#out {
+    color: red;
+}
+
+.pitcher {
+    height: 250px;
+
+}
+
+.choices {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.choice {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 10px;
+    cursor: pointer;
+    background-color: #FFF;
+    border: 2px solid #FFF;
+    border-radius: 30%;
+    width: 64px;
+    height: 64px;
+    line-height: 64px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    user-select: none;
+}
+
+.choice:hover {
+    transform: scale(1.5);
+    border: 3px solid red;
+}
+
+.message {
+    font-size: 28px;
+    color: #333;
+    margin-top: 20px;
+}
+
