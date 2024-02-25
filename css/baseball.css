@@ -1,14 +1,17 @@
-/* Reset CSS */
-body, html {
-    margin: 0;
-    padding: 0;
+body,
+html {
     background-size: cover;
 }
 
-/* センタリング */
+/* 中央寄せ*/
 header {
-    text-align: center;
-    margin: 50px 0;
+    /* flexbox を使って横並びに */
+    display: flex; 
+    /* 左右に平等に */
+    justify-content: space-between; 
+    /* 上下も均等に */
+    align-items: center; 
+    margin: 50px 100px; 
 }
 
 header h1 {
@@ -17,19 +20,30 @@ header h1 {
     font-weight: bolder;
 }
 
-header p {
-    margin-top: 80px;
-    color: white;
-    font-weight: bold;
+
+#rule {
+    color: #000;
+    font-weight: lighter;
+    font-size: 12px;
+    margin: 0 50px 0 0;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 300px; 
+    line-height: 1.6; /* 行の高さを調整 */
+    text-align: justify;
 }
 
-/* メインコンテンツ */
+
+/* メイン */
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
 }
+
 
 /* カウント表示 */
 #counts {
@@ -69,7 +83,16 @@ main {
 
 .pitcher {
     height: 250px;
+}
 
+
+/* ルールの各項目をリストに変更し、インデントを追加 */
+#rule br {
+    display: none; /* 改行を非表示に */
+}
+
+#rule p {
+    margin: 0; /* マージンをリセット */
 }
 
 .choices {
@@ -84,13 +107,14 @@ main {
     margin: 0 10px;
     cursor: pointer;
     background-color: #FFF;
-    border: 2px solid #FFF;
     border-radius: 30%;
-    width: 64px;
-    height: 64px;
-    line-height: 64px;
+    width: 60px;
+    height: 60px;
+    /* 行の幅調整で真ん中に・・・*/
+    line-height: 60px;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px black;
+    /* テキストが選択できないようになる。ユーザービリティの向上によく使われるらしい */
     user-select: none;
 }
 
@@ -99,9 +123,21 @@ main {
     border: 3px solid red;
 }
 
-.message {
-    font-size: 28px;
-    color: #333;
-    margin-top: 20px;
+#resetbtn {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 30px 0;
+    cursor: pointer;
+    background-color: yellow;
+    border-radius: 30%;
+    width: 140px;
+    height: 60px;
+    text-align: center;
+    user-select: none;
+
 }
 
+#resetbtn:hover {
+    transform: scale(1.2);
+    border: 3px solid orange;
+}

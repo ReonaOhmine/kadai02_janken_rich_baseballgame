@@ -16,7 +16,17 @@
 
     <header>
         <h1>プレイボール！！</h1>
-        <p>⚾練習の成果を出そう！⚾</p>
+        <!-- ルール説明 -->
+        <div id="rule">
+            <b>ルール説明</b>
+            ピッチャーからヒットを2本打とう！<br>
+            2本打ったらあなたの勝ち。<br>
+            3アウトになったら、相手の勝ち。<br>
+            ピッチャーと同じコースを選んだら、ヒットになるよ。<br>
+            ピッチャーと違うコースを選んだら、アウトになるよ。<br>
+            フォアボールになったら、それもヒットにカウント！
+        </div>
+
     </header>
 
     <main>
@@ -27,6 +37,7 @@
             <p id="ball"> ボール：<span id="ballCount">0</span></p>
             <p id="out">アウト：<span id="outCount">0</span></p>
         </div>
+
 
         <!--  ピッチャー -->
         <div class="mainvisual">
@@ -44,6 +55,9 @@
         <!-- 最初は画像を非表示にして、結果に応じてImgを表示させる -->
         <img id="messageImg" class="message" src="" style="display: none;">
 
+        <!-- リセットボタン -->
+        <button id="resetbtn" style="display: none;">リセット</button>
+
     </main>
 
     <footer></footer>
@@ -51,13 +65,14 @@
     <script>
         // readyについてはいまいち理解できておらず・・・
         $(document).ready(function () {
-            // ゲーム開始時は0からスタートすることを示す。その後、カウントが増えていくために必要な表記
+            // letで変数を示す。
+            //ゲーム開始時は0からスタートし、その後、状況に応じて変数が入る。
             let strikeCount = 0;
             let ballCount = 0;
             let hitCount = 0;
             let outCount = 0;
 
-                // .choiceがクリックされたらゲーム開始。
+            // .choiceがクリックされたらゲーム開始。
             $('.choice').click(function () {
                 // PCの投げるボールに変数を発生させる
                 // Math.random()は、0以上1未満の変数を付与する。
@@ -75,13 +90,13 @@
                     pitchType = 'ボール';
                 }
 
-                // バッターの選択を処理する。
+                // バッターの選択を表示処理する。
                 // クリックしたバッターチョイスがbatterSwingに反映されるように
                 batterSwing = $(this).text();
 
 
                 // バッティングのシミュレーション
-                // 複数ケースあるので「switch」を使う
+                // 「switch」を使う。ifよりシンプルにかけるメリットらしいが、そうかな・・・？
                 switch (pitchType) {
                     // PCが高めを投げた場合
                     case '高め':
@@ -125,37 +140,109 @@
                         break;
                 }
 
+                // ちなみにifで書くとこんな感じ
+                // if (pitchType === '高め') {
+                //     if (batterSwing === '高め') {
+                //         $('#messageImg').attr('src', 'image/hit.png').show();
+                //         hitCount++;
+                //     } else if (batterSwing === '低め') {
+                //         $('#messageImg').attr('src', 'image/out.png').show();
+                //         outCount++;
+                //     } else {
+                //         $('#messageImg').attr('src', 'image/Strike.png').show();
+                //         strikeCount++;
+                //     }
+                // } else if (pitchType === '低め') {
+                //     if (batterSwing === '高め') {
+                //         $('#messageImg').attr('src', 'image/out.png').show();
+                //         outCount++;
+                //     } else if (batterSwing === '低め') {
+                //         $('#messageImg').attr('src', 'image/hit.png').show();
+                //         hitCount++;
+                //     } else {
+                //         $('#messageImg').attr('src', 'image/Strike.png').show();
+                //         strikeCount++;
+                //     }
+                // } else if (pitchType === 'ボール') {
+                //     if (batterSwing === '高め' || batterSwing === '低め') {
+                //         $('#messageImg').attr('src', 'image/out.png').show();
+                //         outCount++;
+                //     } else {
+                //         $('#messageImg').attr('src', 'image/ball.png').show();
+                //         ballCount++;
+                //     }
+                // }
+
                 // ストライク、ボール、アウトのカウントを更新して表示
+                //IDに応じて変数がテキスト表示される
                 $('#strikeCount').text(strikeCount);
                 $('#ballCount').text(ballCount);
                 $('#outCount').text(outCount);
 
-                if (strikeCount >= 3 || ballCount >= 4 || outCount >= 3) {
-                    $('#messageImg').hide(); // 画像を非表示に
-                    console.log('ゲームリセット！');
-                    resetCounts(); // カウントをリセット
+                //フォアボールの定義を作る    
+                // ボールカウントが4以上になったらボールカウントを0にリセットし、同時にヒットカウントを1増やす
+                if (ballCount >= 4) {
+                    ballCount = 0;
+                    hitCount++;
+                    //ボールカウントとヒットカウントにそれぞれ反映させる
+                    $('#ballCount').text(ballCount);
+                    $('#hitCount').text(hitCount);
+                }
 
+                // 三振の定義を作る
+                if (strikeCount >= 3) {
+                    // ストライクカウントが3以上になったら
                     if (strikeCount >= 3) {
-                        $('#messageImg').attr('src', 'image/haiboku.png').show(); // 画像表示
-                    } else if (ballCount >= 4) {
-                        $('#messageImg').attr('src', 'image/syori.png').show(); // 画像表示
+                        //ストライクカウントを0にリセットし、
+                        strikeCount = 0;
+                        //アウトカウントを1増やす
+                        outCount++;
+                        //ストライクカウントとアウトカウントにそれぞれ反映させる
+                        $('#strikeCount').text(strikeCount);
+                        $('#outCount').text(outCount);
                     }
+
+                }
+
+                //勝敗の定義を作る
+                // アウトカウントが3以上になったら、
+                if (outCount >= 3) {
+                    //画像を表示し、（=敗北を知らせる）
+                    $('#messageImg').attr('src', 'image/haiboku.png').show();
+                    //リセットボタンを表示させる
+                    $('#resetbtn').show();
+                }
+
+                // ヒットカウントが2以上になったら、
+                if (hitCount >= 2) {
+                    //画像を表示し、（勝利を知らせる）
+                    $('#messageImg').attr('src', 'image/syori.png').show();
+                    //リセットボタンを表示させる
+                    $('#resetbtn').show();
                 }
             });
 
-            // カウントをリセットする関数
+            // カウントをリセットする指示を出す
             function resetCounts() {
                 strikeCount = 0;
                 ballCount = 0;
+                hitCount = 0;
                 outCount = 0;
 
                 $('#strikeCount').text(strikeCount);
                 $('#ballCount').text(ballCount);
+                $('#hitCount').text(hitCount);
                 $('#outCount').text(outCount);
             }
+
+            // リセットボタンがクリックされた時の処理
+            $('#resetbtn').click(function () {
+                $('#messageImg').hide(); // 画像を非表示に
+                $('#resetbtn').hide(); // リセットボタンを非表示に
+                resetCounts(); // カウントをリセット
+            });
         });
     </script>
 </body>
-
 
 </html>
